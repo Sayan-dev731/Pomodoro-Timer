@@ -225,7 +225,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({
 
     // Helper function to get route index for direction-aware transitions
     const getRouteIndex = (path: string): number => {
-        const routes = ['/', '/timer', '/tasks', '/stats', '/notes', '/music', '/settings', '/callback'];
+        const routes = ['/', '/timer', '/tasks', '/stats', '/notes', '/music', '/settings'];
         const index = routes.indexOf(path);
         return index !== -1 ? index : 0;
     };
