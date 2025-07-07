@@ -22,7 +22,6 @@ function App() {
     settings,
     backgroundImages,
     setBackgroundImages,
-    currentBackgroundIndex,
     currentBackground,
     setCurrentBackground,
     nextBackground,
