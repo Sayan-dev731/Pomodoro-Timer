@@ -1,0 +1,90 @@
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+
+// Page Components
+import HomePage from '../pages/HomePage';
+import TimerPage from '../pages/TimerPage';
+import TasksPage from '../pages/TasksPage';
+import StatsPage from '../pages/StatsPage';
+import NotesPage from '../pages/NotesPage';
+import SettingsPage from '../pages/SettingsPage';
+import MusicPage from '../pages/MusicPage';
+
+// Transition Components
+import PageTransition from './PageTransition';
+import PageTransitionWrapper from './PageTransitionWrapper';
+
+// Types for transition effects
+type TransitionType = 'fade' | 'slide' | 'zoom' | 'flip' | 'ripple' | 'sweep' | 'particles' | 'random';
+
+const AnimatedRoutes: React.FC = () => {
+  const location = useLocation();
+  const [transitionType, setTransitionType] = useState<TransitionType>('random');
+
+  // Set a different transition type for each route change to make it more interesting
+  useEffect(() => {
+    // Use a specific transition based on route if desired, or keep it random
+    const transitionTypes: Record<string, TransitionType> = {
+      '/': 'fade',
+      '/timer': 'zoom',
+      '/tasks': 'slide',
+      '/stats': 'particles',
+      '/notes': 'sweep',
+      '/music': 'ripple',
+      '/settings': 'flip'
+    };
+
+    // Get transition from path or use random
+    if (location.pathname in transitionTypes) {
+      setTransitionType(transitionTypes[location.pathname]);
+    } else {
+      setTransitionType('random');
+    }
+  }, [location.pathname]);
+
+  return (
+    <div className="animated-routes-container h-full">
+      <PageTransition transitionType={transitionType}>
+        <Routes location={location}>
+          <Route path="/" element={
+            <PageTransitionWrapper scrollAnimation={true}>
+              <HomePage />
+            </PageTransitionWrapper>
+          } />
+          <Route path="/timer" element={
+            <PageTransitionWrapper scrollAnimation={false}>
+              <TimerPage />
+            </PageTransitionWrapper>
+          } />
+          <Route path="/tasks" element={
+            <PageTransitionWrapper scrollAnimation={true}>
+              <TasksPage />
+            </PageTransitionWrapper>
+          } />
+          <Route path="/stats" element={
+            <PageTransitionWrapper scrollAnimation={true}>
+              <StatsPage />
+            </PageTransitionWrapper>
+          } />
+          <Route path="/notes" element={
+            <PageTransitionWrapper scrollAnimation={true}>
+              <NotesPage />
+            </PageTransitionWrapper>
+          } />
+          <Route path="/music" element={
+            <PageTransitionWrapper scrollAnimation={true}>
+              <MusicPage />
+            </PageTransitionWrapper>
+          } />
+          <Route path="/settings" element={
+            <PageTransitionWrapper scrollAnimation={true}>
+              <SettingsPage />
+            </PageTransitionWrapper>
+          } />
+        </Routes>
+      </PageTransition>
+    </div>
+  );
+};
+
+export default AnimatedRoutes;
