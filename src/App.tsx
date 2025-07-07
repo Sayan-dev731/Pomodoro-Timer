@@ -7,17 +7,21 @@ import { usePomodoroStore } from './stores/pomodoroStore';
 import { BingImagesService } from './services/bingImages';
 import { AudioService } from './services/audioService';
 
+// Contexts
+import { SpotifyProvider, useSpotify } from './contexts/SpotifyContext';
+
 // Layout Components
 import Sidebar from './components/layout/Sidebar';
 import MacDock from './components/layout/MacDock';
 import BackgroundManager from './components/layout/BackgroundManager';
 import AnimatedRoutes from './components/layout/AnimatedRoutes';
+import SpotifyDynamicIsland from './components/music/SpotifyDynamicIsland';
 
 // Hooks
 import { useWakeLock } from './hooks/useWakeLock';
 import { useTimerTick } from './hooks/useTimerTick';
 
-function App() {
+function AppContent() {
   const {
     settings,
     backgroundImages,
@@ -28,6 +32,8 @@ function App() {
     tick,
     isRunning
   } = usePomodoroStore();
+
+  const { isAuthenticated: isSpotifyAuthenticated } = useSpotify();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(settings.selectedTheme);
@@ -128,7 +134,7 @@ function App() {
   }, [settings.backgroundImages, settings.customWallpaperEnabled, backgroundImages.length, nextBackground]);
 
   return (
-    <Router>
+    <SpotifyProvider>
       <div className={`min-h-screen transition-all duration-1000 ${settings.clearMode
         ? 'bg-black text-white'
         : `theme-${currentTheme}`
@@ -145,6 +151,11 @@ function App() {
 
         {/* Main Layout */}
         <div className="relative z-10 min-h-screen">
+          {/* Spotify Dynamic Island - Fixed at top center */}
+          <SpotifyDynamicIsland
+            isVisible={isSpotifyAuthenticated && !isFullscreen}
+          />
+
           {/* Main Content */}
           <main className="transition-all duration-300">
             {/* macOS-style Menu Button - Only show when not in fullscreen and on mobile */}
@@ -244,6 +255,16 @@ function App() {
           }}
         />
       </div>
+    </SpotifyProvider>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <SpotifyProvider>
+        <AppContent />
+      </SpotifyProvider>
     </Router>
   );
 }

@@ -9,6 +9,7 @@ import StatsPage from '../pages/StatsPage';
 import NotesPage from '../pages/NotesPage';
 import SettingsPage from '../pages/SettingsPage';
 import MusicPage from '../pages/MusicPage';
+import SpotifyCallbackPage from '../pages/SpotifyCallbackPage';
 
 // Transition Components
 import PageTransition from './PageTransition';
@@ -65,6 +66,11 @@ const AnimatedRoutes: React.FC = () => {
                     <Route path="/settings" element={
                         <PageTransitionWrapper scrollAnimation={true}>
                             <SettingsPage />
+                        </PageTransitionWrapper>
+                    } />
+                    <Route path="/callback" element={
+                        <PageTransitionWrapper scrollAnimation={false}>
+                            <SpotifyCallbackPage />
                         </PageTransitionWrapper>
                     } />
                 </Routes>
